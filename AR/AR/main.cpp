@@ -14,8 +14,8 @@ using namespace std;
 //#define USE_DRAWPIXELS
 
 GLfloat light_ambient[] = { 1.0, 1.0, 1.0, 1.0 };  /* Red diffuse light. */
-GLfloat light_diffuse[] = { 1.0, 0.0, 0.0, 1.0 };  /* Red diffuse light. */
-GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };  /* Infinite light location. */
+GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };  /* Red diffuse light. */
+GLfloat light_position[] = { 1.0, 1.0, 1.0, 1.0 };  /* Infinite light location. */
 GLfloat n[6][3] = {  /* Normals for the 6 faces of a cube. */
 	{ -1.0, 0.0, 0.0 },{ 0.0, 1.0, 0.0 },{ 1.0, 0.0, 0.0 },
 	{ 0.0, -1.0, 0.0 },{ 0.0, 0.0, 1.0 },{ 0.0, 0.0, -1.0 } };
@@ -32,29 +32,45 @@ vector<Point2f> points1, points2;
 vector<uchar> status;
 vector<float> err;
 
-double camD[] = { 6.7649431228632795e+02, 0., 3.8262188058832749e+02, 0.,
-5.9941193806780484e+02, 1.6894241981264270e+02, 0., 0., 1. };
-double distCoeffD[] = { 5.5318827974857022e-02, -1.0129523116603711e+00,
-3.8895464611792836e-02, 2.5365684020675693e-02,
-2.6020235726385716e+00, 0., 0., 8.1013197871984710e-01 };
+double camD[] = {
+	6.88755e+02, 0.,	2.94015e+02, 0.,
+	6.86769e+02, 2.7627e+02, 0., 0., 1. };
+
+double distCoeffD[] = {
+	-0.413141,				0.328714,
+	0,						0,
+	-0.170168 };
+
+
+//double distCoeffD[] = {
+//	0,				0,
+//	0,				0,
+//	0};
+
+
 Mat camera_matrix = Mat(3, 3, CV_64FC1, camD);
 Mat distortion_coefficients = Mat(5, 1, CV_64FC1, distCoeffD);
 Mat objPM;
 vector<double> rv(3), tv(3);
 Mat rvec(rv), tvec(tv);
-double _d[9] = { 1,	0,	0,
+
+double _d[9] = { 
+1,	0,	0,
 0,	-1,	0,
-0,	0,	-1 }; //rotation: looking at -x axis
+0,	0,	-1
+}; //rotation: looking at -x axis
+
+
 Mat rotM(3, 3, CV_64FC1, _d);
 double theta = 0.0, theta1 = 0.0, theta2 = 0.0, phi = 0.0, phi1 = 0.0, phi2 = 0.0, psi = 0.0, psi1 = 0.0, psi2 = 0.0;
 
-Mat outImg(Size(1280, 720), CV_8UC3);
+Mat outImg(Size(640, 480), CV_8UC3);
 int frameNum = 0;
 
 double zt = 0.0;
 
 Mat texttmp(640, 480, CV_8UC3);
-Mat textmp(Size(1280, 720), CV_8UC3);
+Mat textmp(Size(640, 480), CV_8UC3);
 
 VideoCapture cap;
 
@@ -70,15 +86,25 @@ drawBox(void)
 {
 	int i;
 
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < 5; i++) {
+		glColor3f(0.0f, 1.0f, 0.0f);     // Green
 		glBegin(GL_QUADS);
-		glNormal3fv(&n[i][0]);
-		glVertex3fv(&v[faces[i][0]][0]);
-		glVertex3fv(&v[faces[i][1]][0]);
-		glVertex3fv(&v[faces[i][2]][0]);
-		glVertex3fv(&v[faces[i][3]][0]);
+			glNormal3fv(&n[i][0]);
+			glVertex3fv(&v[faces[i][0]][0]);
+			glVertex3fv(&v[faces[i][1]][0]);
+			glVertex3fv(&v[faces[i][2]][0]);
+			glVertex3fv(&v[faces[i][3]][0]);
 		glEnd();
 	}
+
+	glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+	glBegin(GL_QUADS);
+		glNormal3fv(&n[5][0]);
+		glVertex3fv(&v[faces[5][0]][0]);
+		glVertex3fv(&v[faces[5][1]][0]);
+		glVertex3fv(&v[faces[5][2]][0]);
+		glVertex3fv(&v[faces[5][3]][0]);
+	glEnd();
 }
 
 void
@@ -92,7 +118,6 @@ display(void)
 		//		glLoadIdentity();
 		//		gluOrtho2D(0.0, 640.0, 480.0, 0.0);	//Toying around with gluOrtho..
 		//		glOrtho(0.0, 640.0, 480.0, 0.0, -10, 1);
-
 		glMatrixMode(GL_MODELVIEW);
 
 #ifdef USE_DRAWPIXELS
@@ -109,10 +134,10 @@ display(void)
 		else if (img_to_show.step == img_to_show.cols * 3)
 			cvtColor(img_to_show, texttmp, CV_BGR2RGB);
 		flip(texttmp, texttmp, 0);
-		resize(texttmp, textmp, Size(1024, 512));
+		resize(texttmp, textmp, Size(640, 480));
 
 		glEnable(GL_TEXTURE_2D);
-		glTexImage2D(GL_TEXTURE_2D, 0, 3, 1024, 512, 0, GL_RGB, GL_UNSIGNED_BYTE, textmp.data);
+		glTexImage2D(GL_TEXTURE_2D, 0, 3, 640, 480, 0, GL_RGB, GL_UNSIGNED_BYTE, textmp.data);
 
 		glPushMatrix();
 		glTranslated(0, 0, -30);
@@ -140,17 +165,39 @@ display(void)
 	//	glRotated(-phi2 / (2*CV_PI) * 180.0, 0.0, 1.0, 0.0);
 	//	glRotated(-theta2 / (2*CV_PI) * 180.0, 0.0, 0.0, 1.0);
 
-	double m[16] = { _d[0],-_d[3],-_d[6],0,
+	double m[16] = {
+		_d[0],-_d[3],-_d[6],0,
 		_d[1],-_d[4],-_d[7],0,
 		_d[2],-_d[5],-_d[8],0,
-		tv[0],-tv[1],-tv[2],1 };
+		tv[0],-tv[1],-tv[2],1 
+	};
+
+	//m[0] = rotM.at<double>(0, 0);
+	//m[1] = rotM.at<double>(1, 0);
+	//m[2] = rotM.at<double>(2, 0);
+	//m[3] = 0;
+
+	//m[4] = rotM.at<double>(0, 1);
+	//m[5] = rotM.at<double>(1, 1);
+	//m[6] = rotM.at<double>(2, 1);
+	//m[7] = 0;
+
+	//m[8] = rotM.at<double>(0, 2);
+	//m[9] = rotM.at<double>(1, 2);
+	//m[10] = rotM.at<double>(2, 2);
+	//m[11] = 0;
+
+	//m[12] = tvec.at<double>(0, 0);
+	//m[13] = tvec.at<double>(1, 0);
+	//m[14] = tvec.at<double>(2, 0);
+	//m[15] = 1;
 
 	glLoadMatrixd(m);
 
 	glDisable(GL_TEXTURE_2D);
-	glColor3b(255, 0, 0);
-	glTranslated(2.5, -2.5, 0.0);
-	glutSolidCube(2);
+	//glColor3b(255, 0, 0);
+	///glTranslated(0.1, 0.5, 0.0);
+	///glutSolidCube(2);
 	//	glColor3b(0, 0, 255);
 	//	glBegin(GL_QUADS);
 	//	glVertex2i(0, 0);
@@ -159,8 +206,8 @@ display(void)
 	//	glVertex2i(0, 5);
 	//	glEnd();
 
-	//	glScaled(0.35, 0.35, 0.35);
-	//	drawBox();
+		glScaled(0.1, 0.1, 0.1);
+		drawBox();
 	glPopMatrix();
 
 	//	glReadPixels(0, 0, 640, 480, GL_BGR, GL_UNSIGNED_BYTE, outImg.data);
@@ -210,12 +257,54 @@ init(void)
 	/* Setup the view of the cube. */
 	glMatrixMode(GL_PROJECTION);
 
-	double fovx, fovy, focalLength, aspectRatio; Point2d principalPt;
-	calibrationMatrixValues(camera_matrix, Size(640, 480), 0.0, 0.0, fovx, fovy, focalLength, principalPt, aspectRatio);
+	double projection[16] = {
+		0,0,0,0,
+		0,0,0,0,
+		0,0,0,0,
+		0,0,0,0 };
 
-	gluPerspective( /* field of view in degree */ fovy,
-		/* aspect ratio */ 1.0 / aspectRatio,
-		/* Z near */ 1.0, /* Z far */ 1000.0);
+	double	zNear = 1.0f,
+			zFar  = 1000.0f;
+
+	projection[0] = 2 * camera_matrix.at<double>(0,0) / 640;
+	projection[1] = 0;
+	projection[2] = 0;
+	projection[3] = 0;
+
+	projection[4] = 0;
+	projection[5] = 2 * camera_matrix.at<double>(1, 1) / 480;
+	projection[6] = 0;
+	projection[7] = 0;
+
+	projection[8] = 1 - 2 * camera_matrix.at<double>(0, 2) / 640;
+	projection[9] = -1 + (2 * camera_matrix.at<double>(1, 2) + 2) / 480;
+	projection[10] = (zNear + zFar) / (zNear - zFar);
+	projection[11] = -1;
+
+	projection[12] = 0;
+	projection[13] = 0;
+	projection[14] = 2 * zNear*zFar / (zNear - zFar);
+	projection[15] = 0;
+
+
+	glLoadMatrixd(projection);
+
+
+
+
+		//double fovx, fovy, focalLength, aspectRatio; Point2d principalPt;
+		//
+		//calibrationMatrixValues(camera_matrix, Size(640, 480), 0.0, 0.0, fovx, fovy, focalLength, principalPt, aspectRatio);
+		//cout << "(fovx, fovy, focalLength, aspectRatio, principalPt) ="
+		//	<< fovx << "," << fovy << "," << focalLength << "," << aspectRatio << "," << principalPt << endl;
+
+
+		//gluPerspective( /* field of view in degree */ fovy,
+		//	/* aspect ratio */ 1.0 / aspectRatio,
+		//	/* Z near */ 1.0, /* Z far */ 1000.0);
+
+
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -231,6 +320,13 @@ init(void)
 
 void* startGL(void* arg)
 {
+	//+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
+	glClearDepth(1.0f);                   // Set background depth to farthest
+	glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
+	glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
+	glShadeModel(GL_SMOOTH);   // Enable smooth shading
+
 	glutMainLoop();
 
 	return NULL;
@@ -274,10 +370,14 @@ void getPlanarSurface(vector<Point2f>& imgP) {
 	//	double* _r = _d;
 	//	printf("rotation mat: \n %.4f %.4f %.4f\n%.4f %.4f %.4f\n%.4f %.4f %.4f\n",
 	//		   _r[0],_r[1],_r[2],_r[3],_r[4],_r[5],_r[6],_r[7],_r[8]);
+	cout << tvec << endl;
 	printf("traslation: %.3f %.3f %.3f\n", tv[0], tv[1], tv[2]);
+	cout << rotM << endl;
+	printf("\n");
 
 	{
-		double R[3][3]; memcpy(R, Mat(rotM.inv()).data, sizeof(double) * 9);
+		double R[3][3];
+		memcpy(R, Mat(rotM.inv()).data, sizeof(double) * 9);
 
 		if (R[2][0] != -1 && R[2][0] != 1) {
 			theta1 = -asin(R[2][0]);
@@ -326,7 +426,7 @@ void* initOCV(void* arg) {
 	tv[0] = 0; tv[1] = 0; tv[2] = 4;
 
 	//cap.open("../../mov4.mp4");
-	cap.open("PadronAnillos_01.avi");
+	cap.open("PadronAnillos_03.avi");
 	//cap.open("tennis.mp4");
 
 	cap.set(CV_CAP_PROP_POS_FRAMES, 0);
@@ -342,7 +442,7 @@ void* initOCV(void* arg) {
 
 	cout << "[widht, height] = ["
 		<< cap.get(CV_CAP_PROP_FRAME_WIDTH) << ";"
-		<< cap.get(CV_CAP_PROP_FRAME_HEIGHT) << "]"
+		<< cap.get(CV_CAP_PROP_FRAME_HEIGHT)<< "]"
 		<< endl;
 
 	frame.copyTo(img);
@@ -395,7 +495,7 @@ void* startOCV(void* arg) {
 
 void initGL(int argc, char** argv) {
 	glutInit(&argc, argv);
-	glutInitWindowSize(1280, 720);
+	glutInitWindowSize(640, 480);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutwin = glutCreateWindow("red 3D lighted cube");
 	glutDisplayFunc(display);
