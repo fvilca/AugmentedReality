@@ -19,7 +19,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CentersAndConvexFinder.cpp" />
+    <ClCompile Include="ContourFinder.cpp" />
+    <ClCompile Include="EllipseFinder.cpp" />
+    <ClCompile Include="FramePattern.cpp" />
+    <ClCompile Include="h_Matriz.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PatternFinder.cpp" />
+    <ClCompile Include="PatternPoint.cpp" />
+    <ClCompile Include="PreProcessing.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CentersAndConvexFinder.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="ContourFinder.h" />
+    <ClInclude Include="ElipseFinder - Copy.h" />
+    <ClInclude Include="EllipseFinder.h" />
+    <ClInclude Include="FramePattern.h" />
+    <ClInclude Include="h_Matriz.h" />
+    <ClInclude Include="OpencvCalibration.h" />
+    <ClInclude Include="PatternFinder.h" />
+    <ClInclude Include="PatternPoint.h" />
+    <ClInclude Include="PreProcessing.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{95BBA3DA-9207-4B24-BAC6-8C5406A67534}</ProjectGuid>
