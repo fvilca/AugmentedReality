@@ -8,6 +8,7 @@
 #include <GL/glut.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <stdio.h>
+#include "App.h"
 
 using namespace cv;
 using namespace std;
@@ -18,7 +19,7 @@ GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };  /* Red diffuse light. */
 GLfloat light_position[] = { 1.0, 1.0, 1.0, 1.0 };  /* Infinite light location. */
 GLfloat n[6][3] = {  /* Normals for the 6 faces of a cube. */
 	{ -1.0, 0.0, 0.0 },{ 0.0, 1.0, 0.0 },{ 1.0, 0.0, 0.0 },
-	{ 0.0, -1.0, 0.0 },{ 0.0, 0.0, 1.0 },{ 0.0, 0.0, -1.0 } };
+	{ 0.0, -1.0, 0.0 },{ 0.0, 0.0, 1.0 },{ 0.0, 0.0, -1.0 } };	
 GLint faces[6][4] = {  /* Vertex indices for the 6 faces of a cube. */
 	{ 0, 1, 2, 3 },{ 3, 2, 6, 7 },{ 7, 6, 5, 4 },
 	{ 4, 5, 1, 0 },{ 5, 6, 2, 1 },{ 7, 4, 0, 3 } };
@@ -31,6 +32,8 @@ Mat img_to_show;
 vector<Point2f> points1, points2;
 vector<uchar> status;
 vector<float> err;
+
+//
 
 double camD[] = {
 	6.88755e+02, 0.,	2.94015e+02, 0.,
@@ -205,7 +208,8 @@ display(void)
 	//	glVertex2i(5, 5);
 	//	glVertex2i(0, 5);
 	//	glEnd();
-
+		
+		//glTranslated(0, 0, tv[2]);
 		glScaled(0.1, 0.1, 0.1);
 		drawBox();
 	glPopMatrix();
@@ -305,17 +309,17 @@ init(void)
 
 
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	//glMatrixMode(GL_MODELVIEW);
+	///glLoadIdentity();
 
-	//	gluLookAt(0.0, 0.0, 0.0,  /* eye is at (0,0,5) */
-	//			  0.0, 0.0, -10.0,      /* center is at (0,0,0) */
-	//			  0.0, 1.0, 0.);      /* up is in positive Y direction */
-	//	
-	//	/* Adjust cube position to be asthetic angle. */
-	//	glTranslatef(0.0, 0.0, -1.0);
-	//	glRotatef(60, 1.0, 0.0, 0.0);
-	//	glRotatef(-20, 0.0, 0.0, 1.0);
+		//gluLookAt(0.0, 0.0, -tv[2],  /* eye is at (0,0,5) */
+		//		  0.0, 0.0, -10.0,      /* center is at (0,0,0) */
+		//		  0.0, 1.0, 0.);      /* up is in positive Y direction */
+		
+		/* Adjust cube position to be asthetic angle. */
+		/*glTranslatef(0.0, 0.0, -1.0);
+		glRotatef(60, 1.0, 0.0, 0.0);
+		glRotatef(-20, 0.0, 0.0, 1.0);*/
 }
 
 void* startGL(void* arg)
@@ -427,6 +431,8 @@ void* initOCV(void* arg) {
 
 	//cap.open("../../mov4.mp4");
 	cap.open("PadronAnillos_03.avi");
+	///cap.open("MedirPadronAnillos640x360.wmv");
+	
 	//cap.open("tennis.mp4");
 
 	cap.set(CV_CAP_PROP_POS_FRAMES, 0);
