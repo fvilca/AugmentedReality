@@ -18,5 +18,76 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CentersAndConvexFinder.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ContourFinder.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipseFinder.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FramePattern.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="h_Matriz.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternFinder.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternPoint.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PreProcessing.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CentersAndConvexFinder.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContourFinder.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ElipseFinder - Copy.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EllipseFinder.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FramePattern.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h_Matriz.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpencvCalibration.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternFinder.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternPoint.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PreProcessing.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
